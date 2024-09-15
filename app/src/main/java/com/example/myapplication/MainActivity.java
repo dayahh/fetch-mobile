@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 id = jsonObject.getString("id");
                 listid = jsonObject.getString("listId");
                 name = jsonObject.getString("name");
+                //TODO: Log.e does print the values properly, so far the variable "items", the textview,
+                // is not showing any values and it's also not appearing on screen.
+                // If worse comes to worse, just organize the list in the
+                // logcat instead of displaying on screen.
                 String value = ("id: " + id + " listid: " + listid + " name" + name + "\n");
                 items.setText("bruh");
             }
