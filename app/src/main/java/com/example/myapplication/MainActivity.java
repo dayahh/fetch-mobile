@@ -20,14 +20,13 @@ import java.nio.charset.StandardCharsets;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
-    TextView items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        items = findViewById(R.id.items);
+        TextView textView = findViewById(R.id.textView);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -35,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        loadJson();
+        loadJson(textView);
     }
 
-    private void loadJson(){
+    private void loadJson(TextView textView){
         String[] listToBePopulated;
 
         try{
@@ -56,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             maxLength = jsonArray.length();
 
+            String value = "";
+
             for(int i = 0; i < maxLength; i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 id = jsonObject.getString("id");
@@ -65,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 // is not showing any values and it's also not appearing on screen.
                 // If worse comes to worse, just organize the list in the
                 // logcat instead of displaying on screen.
-                String value = ("id: " + id + " listid: " + listid + " name" + name + "\n");
-                items.setText("bruh");
+                value += ("id: " + id + " listid: " + listid + " name: " + name + "\n");
             }
+
+            textView.setText(value);
 
         } catch (Exception e) {
             Log.e("TAG", "loadJson: error" + e);
