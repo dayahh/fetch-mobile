@@ -19,14 +19,12 @@ import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        TextView textView = findViewById(R.id.textView);
+        TextView items = findViewById(R.id.items);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -34,11 +32,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        loadJson(textView);
+        loadJson(items);
     }
 
     private void loadJson(TextView textView){
-        String[] listToBePopulated;
 
         try{
             InputStream inputStream = getAssets().open("fetchData.json");
@@ -47,26 +44,22 @@ public class MainActivity extends AppCompatActivity {
             inputStream.read(buffer);
             inputStream.close();
 
-            String json;
-            int maxLength;
+            String json = new String(buffer, StandardCharsets.UTF_8);
             String id, listid, name;
-
-            json = new String(buffer, StandardCharsets.UTF_8);
             JSONArray jsonArray = new JSONArray(json);
-            maxLength = jsonArray.length();
 
             String value = "";
 
-            for(int i = 0; i < maxLength; i++){
+            for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 id = jsonObject.getString("id");
                 listid = jsonObject.getString("listId");
                 name = jsonObject.getString("name");
-                //TODO: Log.e does print the values properly, so far the variable "items", the textview,
-                // is not showing any values and it's also not appearing on screen.
-                // If worse comes to worse, just organize the list in the
-                // logcat instead of displaying on screen.
-                value += ("id: " + id + " listid: " + listid + " name: " + name + "\n");
+                //TODO: sort by "listid" in increasing order
+
+                    if(!name.isBlank() && !name.equals("null")){
+                        value += (" listid: " + listid + ", name: " + name + ", id: " + id +  "\n" + "\n");
+                    }
             }
 
             textView.setText(value);
