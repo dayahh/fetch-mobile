@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             int listid;
             JSONArray jsonArray = new JSONArray(json);
             String value = "";
+            String singleValue = "";
             List<String> infoList = new ArrayList<>();
 
             Vector<String> stringVector = new Vector<>();
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 id = jsonObject.getString("id");
                 listid = jsonObject.getInt("listId");
                 name = jsonObject.getString("name");
-                String singleValue = ("listId: " + listid + ", name: " + name + ", id: " + id + "\n" + "\n");
+                if(!name.isBlank() && !name.equals("null")){
+                    singleValue = ("listId: " + listid + ", name: " + name + ", id: " + id + "\n" + "\n");
+                }
                 stringVector.add(singleValue);
             }
             Collections.sort(stringVector);
