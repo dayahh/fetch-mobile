@@ -16,6 +16,14 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,30 +44,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadJson(TextView textView){
-
         try{
             InputStream inputStream = getAssets().open("fetchData.json");
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
             inputStream.close();
-
             String json = new String(buffer, StandardCharsets.UTF_8);
-            String id, listid, name;
+            String id, name;
+            int listid;
             JSONArray jsonArray = new JSONArray(json);
-
             String value = "";
+            List<String> infoList = new ArrayList<>();
 
-            for(int i = 0; i < jsonArray.length(); i++){
+            Vector<String> stringVector = new Vector<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 id = jsonObject.getString("id");
-                listid = jsonObject.getString("listId");
+                listid = jsonObject.getInt("listId");
                 name = jsonObject.getString("name");
-                //TODO: sort by "listid" in increasing order
-
-                    if(!name.isBlank() && !name.equals("null")){
-                        value += (" listid: " + listid + ", name: " + name + ", id: " + id +  "\n" + "\n");
-                    }
+                String singleValue = ("listId: " + listid + ", name: " + name + ", id: " + id + "\n" + "\n");
+                stringVector.add(singleValue);
+            }
+            Collections.sort(stringVector);
+            for (int i = 0; i < stringVector.size(); i++) {
+                value += stringVector.get(i);
             }
 
             textView.setText(value);
@@ -71,3 +80,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
